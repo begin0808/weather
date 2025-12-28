@@ -76,14 +76,24 @@ const getGreeting = () => {
 // 2. 共用組件 (Components)
 // ==========================================
 
+// 自訂小企鵝 Loading 組件
+const PenguinLoader = ({ text = "小企鵝正在努力抓取資料中..." }) => (
+  <div className="flex flex-col items-center justify-center h-64 space-y-4">
+    <div className="text-6xl animate-[waddle_1s_infinite_ease-in-out] origin-bottom transform">
+      🐧
+    </div>
+    <p className="text-slate-500 font-bold text-lg animate-pulse">{text}</p>
+  </div>
+);
+
 // AQI 儀表板組件
 const AQIGauge = ({ value }) => {
-  const radius = 80;
-  const stroke = 12;
+  const radius = 80; // 半徑
+  const stroke = 12; // 線條粗細
   const safeValue = typeof value === 'object' ? 0 : Number(value); 
   const normalizedValue = Math.min(Math.max(safeValue || 0, 0), 300);
   const percentage = normalizedValue / 300;
-  const circumference = radius * Math.PI;
+  const circumference = radius * Math.PI; // 半圓周長
   const strokeDashoffset = circumference - (percentage * circumference);
 
   let color = '#10b981'; // green
@@ -334,9 +344,7 @@ const AQIDashboard = ({ onNavigate }) => {
 
         <div className="container mx-auto px-4 py-6">
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader2 className="w-10 h-10 animate-spin text-emerald-400" />
-            </div>
+            <PenguinLoader text="北極熊努力抓取空品資料中..." />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredData.map((record, index) => {
@@ -622,7 +630,7 @@ const WeatherDashboard = ({ onNavigate }) => {
             
             <div className="flex items-center gap-2 md:gap-3 py-2 md:py-0">
                {/* 切換按鈕 (手機版文字簡化) */}
-               <button onClick={onNavigate} className="bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white shadow-lg shadow-cyan-500/30 px-3 md:px-4 py-1.5 md:py-2 rounded-full font-bold text-xs md:text-sm flex items-center gap-2 transform hover:-translate-y-0.5 transition-all border border-white/20 whitespace-nowrap">
+               <button onClick={onNavigate} className="bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-600 text-white shadow-lg shadow-cyan-500/30 px-3 md:px-4 py-1.5 md:py-2 rounded-full font-bold text-xs md:text-sm flex items-center gap-2 transform hover:-translate-y-0.5 transition-all border border-white/20 whitespace-nowrap">
                   <div className="text-lg md:text-xl animate-[waddle_2s_infinite_ease-in-out] origin-bottom inline-block">🐻‍❄️</div> <span className="hidden sm:inline">北極熊空品觀察站</span><span className="sm:hidden">空品</span>
                </button>
 
@@ -641,7 +649,7 @@ const WeatherDashboard = ({ onNavigate }) => {
 
       <main className="pt-32 md:pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8">
         {loading ? (
-          <div className="flex items-center justify-center h-64"><Loader2 className="w-10 h-10 animate-spin text-blue-400"/></div>
+          <PenguinLoader />
         ) : error ? (
           <div className="flex flex-col items-center justify-center h-64 text-red-300"><AlertCircle className="w-10 h-10 mb-2"/><p>{error}</p></div>
         ) : (
